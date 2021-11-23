@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-import {assert, assertEquals, assertExists, assertObjectMatch} from "https://deno.land/std/testing/asserts.ts";
-import chai from 'https://cdn.skypack.dev/chai';
-import LinkedList from './LinkedList.js';
-
-Deno.test("LinkedList was instantiated: ", () => {
-  assertObjectMatch(new LinkedList(), {head: undefined, tail: undefined, length: 0});
-});
-
-Deno.test("Pushing node to list returns node", () => {
-  const testList = new LinkedList();
-  assertObjectMatch(testList.push('One'), {data: 'One', next: undefined});
-=======
 import {assert, assertExists, assertEquals, assertObjectMatch} from "https://deno.land/std/testing/asserts.ts";
 import chai from 'https://cdn.skypack.dev/chai';
 
@@ -50,5 +37,4 @@ Deno.test("Removal of only element should result in list size of 0", () => {
     const pushedNode = list.push('First');
     list.pop();
     assertEquals(list.size(), 0);
->>>>>>> 6f531d9ffc4d989ed9c4bd785459c144131dedb0
 });
