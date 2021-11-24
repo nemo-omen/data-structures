@@ -82,15 +82,13 @@ export class LinkedList {
 
   insert(val, index) {
     if(index < 0 || index > this.length) throw new IndexError('Index out of bounds');
-    // if(index < 0 || index > this.length) return false;
-    if(index === this.length) return !!this.push(val);
+    if(index === this.length) return this.push(val);
     let newNode = new ListNode(val);
     let previous = this.get(index - 1);
     let temp = previous.next;
     previous.next = newNode;
     newNode.next = temp;
-    this.length++;
-    newNode.id = this.length;
-    return true;
+    this.#length++;
+    return newNode;
   }
 }

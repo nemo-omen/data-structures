@@ -45,6 +45,7 @@ Deno.test("pop() should throw UnderFlowError", () => {
   assertThrows(() => list.pop(), UnderflowError);
 })
 
+
 Deno.test("get() should return ListNode", () => {
     list.push('First');
     list.push('Third');
@@ -52,13 +53,12 @@ Deno.test("get() should return ListNode", () => {
     assert(getResult instanceof ListNode);
 });
 
-Deno.test("get(1) should return ListNode at 2nd index", () => {
-  list.push('Third');
-  const getResult = list.get(2);
-  assertEquals(getResult.data, 'Third');
+Deno.test("get(0) should have data: 'First'", () => {
+  const getResult = list.get(0);
+  assertEquals(getResult.data, 'First');
 });
 
-// Deno.test("insert() should return ListNode", () => {
-//   const insertResult = list.insert('Second', 1);
-//   assert(insertResult instanceof ListNode);
-// });
+Deno.test("insert() should return ListNode", () => {
+  const insertResult = list.insert('Second', 1);
+  assert(insertResult instanceof ListNode);
+});
