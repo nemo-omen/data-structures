@@ -1,42 +1,9 @@
 export class ListNode {
-<<<<<<< HEAD
   data;
   next;
   constructor(val) {
     this.data = val;
     this.next = undefined;
-  }
-} 
-
-class LinkedList {
-  head;
-  tail;
-  length;
-  constructor() {
-    this.head = undefined;
-    this.tail = undefined;
-    this.length = 0;
-=======
-  next;
-  data;
-  constructor(val) {
-    this.data = val;
-    this.next = undefined;
->>>>>>> 6f531d9ffc4d989ed9c4bd785459c144131dedb0
-  }
-
-  push(val) {
-    let node = new ListNode(val);
-
-    if(!this.head) {
-      this.head = node;
-      this.tail = this.head;
-    } else {
-      this.tail.next = node;
-      this.tail = node;
-    }
-    this.length++;
-    return this.tail;
   }
 }
 
@@ -47,11 +14,11 @@ export class LinkedList {
   constructor() {
     this.head = undefined;
     this.tail = undefined;
-    this.length = 0;
+    this.#length = 0;
   }
 
   size() {
-    return this.length;
+    return this.#length;
   }
 
   push(val) {
@@ -64,30 +31,32 @@ export class LinkedList {
       this.tail.next = node;
       this.tail = node;
     }
-    this.length++;
+    this.#length++;
     console.log(this.tail);
     return this.tail;
   }
 
   pop() {
-    if(!list.head) return;
+    if(!this.head) return undefined;
     let current = this.head;
     let newTail = current;
-
+    let oldTail;
+    
     while(current.next) {
       newTail = current;
       current = current.next;
     }
 
+    oldTail = newTail.next;
     this.tail = newTail;
     this.tail.next = undefined;
-    this.length--;
+    this.#length--;
 
     if(this.length === 0) {
       this.head = undefined;
       this.tail = undefined;
     }
 
-
+    return oldTail;
   }
 }
