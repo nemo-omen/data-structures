@@ -4,6 +4,9 @@ const list = new LinkedList();
 
 list.push('First');
 
-console.log(list.size());
+list.push('Third');
 
-list.pop();
+// list.get(1);
+
+console.log(list.get(1));
+// console.log(list);

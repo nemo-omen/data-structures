@@ -1,47 +1,64 @@
-import {assert, assertExists, assertEquals, assertObjectMatch} from "https://deno.land/std/testing/asserts.ts";
-// import chai from 'https://cdn.skypack.dev/chai';
-// import { Merlin } from "https://deno.land/x/merlin/mod.ts";
-import { Rhum } from "https://deno.land/x/rhum@v1.1.11/mod.ts";
-
-import { LinkedList, ListNode } from './LinkedList.js';
+import {assert,
+        assertExists, 
+        assertEquals, 
+        assertObjectMatch,
+        assertThrows
+      } from "https://deno.land/std/testing/asserts.ts";
+import { LinkedList, ListNode, UnderflowError } from './LinkedList.js';
 
 const list = new LinkedList();
 const pushedNode = list.push('First');
-
 
 Deno.test("LinkedList was instantiated", () => {
   assert(list instanceof LinkedList);
 });
 
-Deno.test("Pushed ListNode should be instance of ListNode", () => {
+Deno.test("ListNode was instantiated", () => {
   assert(pushedNode instanceof ListNode);
 });
 
-Deno.test("Pushed ListNode data should be 'First'", () => {
+Deno.test("ListNode data should be 'First'", () => {
   assertEquals(pushedNode.data, 'First');
 });
 
-Deno.test("Pushed ListNode next should be undefined", () => {
+Deno.test("ListNode.next() should be 'undefined'", () => {
   assertEquals(pushedNode.next, undefined);
 });
 
-Deno.test("List size should be 1 after first push", () => {
+Deno.test("List size should be 1", () => {
   assertEquals(list.size(), 1);
 });
 
-Deno.test("Removal of only element should result in list size of 0", () => {
+Deno.test("size() should be 0", () => {
     list.pop();
     const size = list.size();
     assertEquals(size, 0);
 });
 
-Deno.test("pop() should return a ListNode", () => {
+Deno.test("pop() should return ListNode", () => {
   list.push('First');
   const returned = list.pop();
   assert(returned instanceof ListNode);
 });
 
-Deno.test("pop() on empty LinkedList should return undefined", () => {
-  const popResult = list.pop();
-  assertEquals(undefined, popResult);
+Deno.test("pop() should throw UnderFlowError", () => {
+  assertThrows(() => list.pop(), UnderflowError);
 })
+
+Deno.test("get() should return ListNode", () => {
+    list.push('First');
+    list.push('Third');
+    const getResult = list.get(1);
+    assert(getResult instanceof ListNode);
+});
+
+Deno.test("get(1) should return ListNode at 2nd index", () => {
+  list.push('Third');
+  const getResult = list.get(1);
+  assertEquals(getResult.data, 'Third');
+});
+
+// Deno.test("insert() should return ListNode", () => {
+//   const insertResult = list.insert('Second', 1);
+//   assert(insertResult instanceof ListNode);
+// });
