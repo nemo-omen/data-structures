@@ -54,7 +54,7 @@ Deno.test("get() should return ListNode", () => {
 
 Deno.test("get(1) should return ListNode at 2nd index", () => {
   list.push('Third');
-  const getResult = list.get(1);
+  const getResult = list.get(2);
   assertEquals(getResult.data, 'Third');
 });
 
