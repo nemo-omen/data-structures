@@ -95,11 +95,28 @@ export class LinkedList {
 
     if(index === this.#length) return this.push(val);
     let newNode = new ListNode(val);
-    let previous = this.get(index - 1);
-    let temp = previous.next;
-    previous.next = newNode;
-    newNode.next = temp;
+    if(index === 0) {
+      let temp = this.head;
+      this.head = newNode;
+      this.head.next = temp;
+    } else {
+      let previous = this.get(index - 1);
+      let temp = previous.next;
+      previous.next = newNode;
+      newNode.next = temp;
+    }
     this.#length++;
     return newNode;
+  }
+
+  unshift(val) {
+    if(this.size === 0) this.push(val);
+
+    let newNode = new ListNode(val);
+    let temp = this.head;
+    this.head = newNode;
+    this.head.next = temp;
+    this.#length++;
+    return this.head;
   }
 }

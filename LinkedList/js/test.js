@@ -71,17 +71,46 @@ describe("Empty LinkedList", () => {
     });
   });
 
-  describe('push()', () => {
-    it('should return instance of ListNode', () => {
-      let pushResult = list.push('First');
-      assertEquals(pushResult instanceof ListNode, true);
-    });
-  });
-
   describe('insert(0)', () => {
     it('should return instance of ListNode', () => {
       let insertResult = list.insert('First', 0);
       assertEquals(insertResult instanceof ListNode, true);
+    });
+  });
+
+  describe('push()', () => {
+    let pushResult;
+
+    beforeEach(() => {
+      pushResult = list.push('First');
+    })
+    it('should return instance of ListNode', () => {
+      assertEquals(pushResult instanceof ListNode, true);
+    });
+
+    it('should have a size of 1', () => {
+      assertEquals(list.size(), 1);
+    });
+
+  });
+
+  describe('unshift()', () => {
+    let unshiftResult;
+
+    beforeEach(() => {
+      unshiftResult = list.unshift('First');
+    });
+
+    it('should return instance of ListNode', () => {
+      assertEquals(unshiftResult instanceof ListNode, true);
+    });
+
+    it('head.data should be "First"', () => {
+      assertEquals(list.head.data, 'First');
+    });
+
+    it('should have a size of 1', () => {
+      assertEquals(list.size(), 1);
     });
   });
 
@@ -118,51 +147,105 @@ describe('Non-Empty LinkedList', () => {
       assertStrictEquals(list.head, list.tail);
     });
   });
+
+  describe('head.next', () => {
+    it('should be instance of ListNode', () => {
+      list.push('Two');
+      assertEquals(list.head.next instanceof ListNode, true);
+    });
+  });
+
+  describe('size() after push', () => {
+    it('should be 2', () => {
+      list.push('Two');
+      assertEquals(list.size(), 2);
+    });
+  });
+
 });
 
+describe('Multi-Item LinkedList', () => {
+  let list;
+  beforeEach(() => {
+    list = new LinkedList();
+    list.push('First');
+    list.push('Second');
+    list.push('Third');
+  });
 
-// Deno.test("ListNode was instantiated", () => {
-//   assert(pushedNode instanceof ListNode);
-// });
+  describe('tail.data', () => {
+    it('should be "Third"', () => {
+      assertEquals(list.tail.data, 'Third');
+    });
+  });
 
-// Deno.test("ListNode data should be 'First'", () => {
-//   assertEquals(pushedNode.data, 'First');
-// });
+  describe('get(1)', () => {
+    it('should return a ListNode', () => {
+      assertEquals(list.get(1) instanceof ListNode, true);
+    });
 
-// Deno.test("ListNode.next() should be 'undefined'", () => {
-//   assertEquals(pushedNode.next, undefined);
-// });
+    it('should have data: "Second"', () => {
+      assertEquals(list.get(1).data, 'Second');
+    });
+  });
 
-// Deno.test("List size should be 1", () => {
-//   assertEquals(list.size(), 1);
-// });
+  describe('insert(\'Four\', 1)', () => {
+    let insertReturn;
 
-// Deno.test("pop() should return ListNode", () => {
-//   list.push('First');
-//   const returned = list.pop();
-//   assert(returned instanceof ListNode);
-// });
+    beforeEach(() => {
+      insertReturn = list.insert('Fourth', 1);
+    });
 
-// Deno.test("pop() should throw UnderFlowError", () => {
-//   assertThrows(() => list.pop(), UnderflowError);
-// })
+    it('should return a ListNode', () => {
+      assertEquals(insertReturn instanceof ListNode, true);
+    });
 
+    it('should have data: "Fourth"', () => {
+      assertEquals(insertReturn.data, 'Fourth');
+    });
+  });
 
-// Deno.test("get() should return ListNode", () => {
-//     list.push('First');
-//     list.push('Third');
-//     const getResult = list.get(1);
-//     assert(getResult instanceof ListNode);
-// });
+  describe('insert at front', () => {
+    let insertReturn;
 
-// Deno.test("get(0) should have data: 'First'", () => {
-//   const getResult = list.get(0);
-//   assertEquals(getResult.data, 'First');
-// });
+    beforeEach(() => {
+      insertReturn = list.insert('Fourth', 0);
+    });
 
-// console.log('list: ', list);
+    it('should return a ListNode', () => {
+      assertEquals(insertReturn instanceof ListNode, true);
+    });
 
-// Deno.test("insert() should return ListNode", () => {
-//   const insertResult = list.insert('Second', 1);
-//   assert(insertResult instanceof ListNode);
-// });
+    it('head.data should equal "Fourth"', () => {
+      assertEquals(list.head.data, 'Fourth');
+    });
+
+    it('head.next.data should equal "First"', () => {
+      assertEquals(list.head.next.data, 'First');
+    });
+
+    it('size() should be 4', () => {
+      assertEquals(list.size(), 4);
+    });
+  });
+
+  describe('insert at end', () => {
+    it('should return a ListNode', () => {
+      let insertReturn = list.insert('Fourth', 3);
+      assertEquals(insertReturn instanceof ListNode, true);
+    });
+  });
+
+  describe('insert after end', () => {
+    it('should throw IndexError', () => {
+      assertThrows(() => list.insert('Fourth', 4));
+    });
+  });
+
+  describe('insert before begin', () => {
+    it('should throw IndexError', () => {
+      assertThrows(() => list.insert('Fourth', -1), IndexError);
+    })
+  });
+
+});
