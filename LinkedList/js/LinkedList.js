@@ -43,6 +43,25 @@ export class LinkedList {
     return this.#length;
   }
 
+  get(index) {
+    if(this.size() === 0) 
+      throw new UnderflowError('List is empty.');
+
+    if(index < 0 || index > this.#length) 
+      throw new IndexError('Index out of range.');
+
+    if(index === null || index === undefined) 
+      throw new IllegalArgumentError('No index provided');
+
+    let current = this.head;
+    for(let i = 0; i <= index; i++) {
+      if(i === index) {
+        return current;
+      }
+      current = current.next;
+    }
+  }
+
   push(val) {
     if(!val) throw new IllegalArgumentError('No value parameter provided.');
 
@@ -120,7 +139,7 @@ export class LinkedList {
     this.tail.next = undefined;
     this.#length--;
 
-    if(this.length === 0) {
+    if(this.#length === 0) {
       this.head = undefined;
       this.tail = undefined;
     }
@@ -128,22 +147,22 @@ export class LinkedList {
     return oldTail;
   }
 
-  get(index) {
+  shift() {
     if(this.size() === 0) 
-      throw new UnderflowError('List is empty.');
+      throw new UnderflowError('List already empty.');
+    
+    if(this.size === 1) 
+      return this.pop();
 
-    if(index < 0 || index > this.#length) 
-      throw new IndexError('Index out of range.');
+    let oldHead = this.head;
+    this.head = oldHead.next;
+    this.#length--;
 
-    if(index === null || index === undefined) 
-      throw new IllegalArgumentError('No index provided');
-
-    let current = this.head;
-    for(let i = 0; i <= index; i++) {
-      if(i === index) {
-        return current;
-      }
-      current = current.next;
+    if(this.#length === 0) {
+      this.head = undefined;
+      this.tail = undefined;
     }
+
+    return oldHead;
   }
 }

@@ -35,12 +35,6 @@ describe("LinkedList", () => {
     });
   });
 
-  describe('pop()', () => {
-    it('should throw UnderflowError', () => {
-      assertThrows(() => list.pop(), UnderflowError);
-    });
-  });
-
   describe('get()', () => {
     it('should throw UnderflowError', () => {
       assertThrows(() => list.get(1), UnderflowError);
@@ -167,9 +161,9 @@ describe("LinkedList", () => {
       });
     });
 
-    describe('at [1] of empty LinkedList', () => {
+    describe('at size() + 1 of empty LinkedList', () => {
       it('should throw IndexError', () => {
-        assertThrows(() => list.insert(new ListNode('First'), 1), IndexError);
+        assertThrows(() => list.insert(new ListNode('First'), list.size() + 1), IndexError);
       });
     });
 
@@ -180,25 +174,91 @@ describe("LinkedList", () => {
     });
 
     describe('at [1] of non-empty LinkedList', () => {
-      
-      it('should return LinkNode{data: "Third", next: ListNode{data: "Second", next: undefined}}', () => {
+      let dummyInsert, dummyFirst, dummySecond;
+      beforeEach(() => {
         list.push('First');
         list.push('Second');
+        dummyFirst = new ListNode('First');
+        dummyInsert = new ListNode('Third');
+        dummySecond = new ListNode('Second');
+        dummyFirst.next = dummyInsert;
+        dummyInsert.next = dummySecond;
+      });
+      
+      it('should return LinkNode{data: "Third", next: ListNode{data: "Second", next: undefined}}', () => {
         insertResult = list.insert('Third', 1);
-        assertEquals(insertResult instanceof ListNode);
+        assertEquals(insertResult, dummyInsert);
+      });
+
+      it('should have a head with next: ListNode{data: "Third", next: ListNode{data: "Second", next: undefined}}', () => {
+        insertResult = list.insert('Third', 1);
+        assertEquals(list.head.next, dummyInsert);
       });
     });
   });
 
+  describe('pop()', () => {
+    describe('on empty list', () => {
+      it('should throw UnderflowError', () => {
+        assertThrows(() => list.pop(), UnderflowError);
+      });
+    });
 
+    describe('on list size = 3', () => {
+      let popResult;
+      beforeEach(() => {
+        list.push('First');
+        list.push('Second');
+        list.push('Third');
+      });
 
+      it('should return ListNode{data: "Third", next: undefined}', () => {
+        popResult = list.pop();
+        assertEquals(popResult, new ListNode('Third'));
+      });
 
+      it('should result in list size n - 1', () => {
+        let preSize = list.size();
+        list.pop();
+        let postSize = list.size();
+        assertEquals(preSize - postSize, 1);
+      });
+    });
+  });
 
+  describe('shift()', () => {
+    describe('on empty list', () => {
+      it('should throw UnderflowError', () => {
+        assertThrows(() => list.shift(), UnderflowError);
+      });
+    });
 
-  // describe('insert(1) on empty list', () => {
-  //   it('should throw IndexError', () => {
-  //     assertThrows(() => list.insert('First', 1), IndexError);
-  //   });
-  // });
+    describe('on list size = 3', () => {
+      let shiftResult;
+      let dummyFirst, dummySecond, dummyThird;
+
+      beforeEach(() => {
+        list.push('First');
+        list.push('Second');
+        list.push('Third');
+        dummyFirst = new ListNode('First');
+        dummySecond = new ListNode('Second');
+        dummyThird = new ListNode('Third');
+        dummyFirst.next = dummySecond;
+        dummySecond.next = dummyThird;
+      });
+
+      it('should return ListNode{data: "First", next: {data: "Second", next: {data: "Third", next: undefined}}', () => {
+        assertEquals(list.shift(), dummyFirst);
+      });
+
+      it('should result in list size n - 1', () => {
+        let preSize = list.size();
+        list.shift();
+        let postSize = list.size();
+        assertEquals(preSize - postSize, 1);
+      });
+    });
+  });
 
 });
