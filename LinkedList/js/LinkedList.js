@@ -12,10 +12,18 @@ export class IndexError extends Error {
   }
 }
 
+export class IllegalArgumentError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'IllegalArgumentError';
+  }
+}
+
 export class ListNode {
   data;
   next;
   constructor(val) {
+    if(!val) throw new IllegalArgumentError('No value parameter provided.');
     this.data = val;
     this.next = undefined;
   }
@@ -36,6 +44,11 @@ export class LinkedList {
   }
 
   push(val) {
+    if(!val) throw new IllegalArgumentError('No value parameter provided.');
+
+    // allow for parameters of type: ListNode
+    // or the value of a ListNode to be instantiated on the spot
+    if(typeof val === 'object' && (val !== null || val !== undefined)) return this.push(val.data);
     const node = new ListNode(val);
 
     if(!this.head) {
@@ -47,6 +60,47 @@ export class LinkedList {
     }
     this.#length++;
     return this.tail;
+  }
+
+  unshift(val) {
+    if(!val) throw new IllegalArgumentError('No value parameter provided.');
+    if(typeof val === 'object' && (val !== null || val !== undefined)) return this.unshift(val.data);
+
+    if(this.size === 0) {
+      this.push(val)
+    } else {
+      let newNode = new ListNode(val);
+      let temp = this.head;
+      this.head = newNode;
+      this.head.next = temp;
+      this.#length++;
+    };
+    return this.head;
+  }
+
+  insert(val, index) {
+    if(index < 0 || index > this.#length) 
+      throw new IndexError(
+          `Index out of bounds. Index ${index} is ${index < 0 ? 'smaller' : 'larger'}  than the list's size.`
+      );
+
+    if(typeof val === 'object' && (val !== null || val !== undefined)) return this.insert(val.data, index);
+
+    if(index === this.#length) return this.push(val);
+
+    let newNode = new ListNode(val);
+    if(index === 0) {
+      let temp = this.head;
+      this.head = newNode;
+      this.head.next = temp;
+    } else {
+      let previous = this.get(index - 1);
+      let temp = previous.next;
+      previous.next = newNode;
+      newNode.next = temp;
+    }
+    this.#length++;
+    return newNode;
   }
 
   pop() {
@@ -75,8 +129,14 @@ export class LinkedList {
   }
 
   get(index) {
-    if(this.size() === 0) throw new UnderflowError('List is empty.');
-    if(index < 0 || index > this.#length) throw new IndexError('Index out of range.');
+    if(this.size() === 0) 
+      throw new UnderflowError('List is empty.');
+
+    if(index < 0 || index > this.#length) 
+      throw new IndexError('Index out of range.');
+
+    if(index === null || index === undefined) 
+      throw new IllegalArgumentError('No index provided');
 
     let current = this.head;
     for(let i = 0; i <= index; i++) {
@@ -85,38 +145,5 @@ export class LinkedList {
       }
       current = current.next;
     }
-  }
-
-  insert(val, index) {
-    if(index < 0 || index > this.#length) 
-      throw new IndexError(
-          `Index out of bounds. Index ${index} is ${index < 0 ? 'smaller' : 'larger'}  than the list's size.`
-      );
-
-    if(index === this.#length) return this.push(val);
-    let newNode = new ListNode(val);
-    if(index === 0) {
-      let temp = this.head;
-      this.head = newNode;
-      this.head.next = temp;
-    } else {
-      let previous = this.get(index - 1);
-      let temp = previous.next;
-      previous.next = newNode;
-      newNode.next = temp;
-    }
-    this.#length++;
-    return newNode;
-  }
-
-  unshift(val) {
-    if(this.size === 0) this.push(val);
-
-    let newNode = new ListNode(val);
-    let temp = this.head;
-    this.head = newNode;
-    this.head.next = temp;
-    this.#length++;
-    return this.head;
   }
 }
