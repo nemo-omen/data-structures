@@ -5,6 +5,13 @@ export class UnderflowError extends Error {
   }
 }
 
+export class IndexError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'IndexError';
+  }
+}
+
 export class ListNode {
   data;
   next;
@@ -39,7 +46,6 @@ export class LinkedList {
       this.tail = node;
     }
     this.#length++;
-    // console.log(this.tail);
     return this.tail;
   }
 
@@ -69,7 +75,8 @@ export class LinkedList {
   }
 
   get(index) {
-    if(index < 0 || index > this.#length) throw new IndexError('Index out of range');
+    if(this.size() === 0) throw new UnderflowError('List is empty.');
+    if(index < 0 || index > this.#length) throw new IndexError('Index out of range.');
 
     let current = this.head;
     for(let i = 0; i <= index; i++) {
@@ -81,8 +88,12 @@ export class LinkedList {
   }
 
   insert(val, index) {
-    if(index < 0 || index > this.length) throw new IndexError('Index out of bounds');
-    if(index === this.length) return this.push(val);
+    if(index < 0 || index > this.#length) 
+      throw new IndexError(
+          `Index out of bounds. Index ${index} is ${index < 0 ? 'smaller' : 'larger'}  than the list's size.`
+      );
+
+    if(index === this.#length) return this.push(val);
     let newNode = new ListNode(val);
     let previous = this.get(index - 1);
     let temp = previous.next;
