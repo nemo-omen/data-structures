@@ -8,7 +8,9 @@ list.push('First');
 
 list.push(node);
 
-list.push();
+list.push('Third');
+
+console.log(list.update(1, 'Whatever'));
 
 // list.push('Second');
 

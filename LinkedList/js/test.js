@@ -35,12 +35,6 @@ describe("LinkedList", () => {
     });
   });
 
-  describe('get()', () => {
-    it('should throw UnderflowError', () => {
-      assertThrows(() => list.get(1), UnderflowError);
-    });
-  });
-
   describe('push()', () => {
     let pushResult;
     
@@ -269,6 +263,7 @@ describe("LinkedList", () => {
     });
 
     describe('on non-empty list', () => {
+      let dummyFirst, dummySecond, dummyThird;
       beforeEach(() => {
         list.push('First');
         list.push('Second');
@@ -280,27 +275,210 @@ describe("LinkedList", () => {
         dummySecond.next = dummyThird;
       });
 
-      describe('remove index smaller than list', () => {
+      describe('index smaller than list', () => {
         it('should throw IndexError', () => {
           assertThrows(() => list.remove(-1), IndexError);
         });
       });
 
-      describe('remove index larger than list', () => {
+      describe('index larger than list', () => {
         it('should throw IndexError', () => {
           assertThrows(() => list.remove(list.size()), IndexError);
         });
       });
 
-      describe('remove second item', () => {
-        let removeResult = list.remove(1);
+      describe('with non-number argument', () => {
+        it('should throw IllegalArgumentError', () => {
+          assertThrows(() => list.remove('First'), IllegalArgumentError);
+        });
+      });
+
+      describe('second item', () => {
         it('should return ListNode{data: "Second", next: ListNode{data: "Third", next: undfined}}', () => {
+          let removeResult = list.remove(1);
           assertEquals(removeResult, dummySecond);
         });
-      })
-    })
+      });
+      
+      describe('first item', () => {
+        it('should return ListNode{data: "First, next: "ListNode...}}', () => {
+          let removeResult = list.remove(0);
+          assertEquals(removeResult, dummyFirst);
+        });
+      });
 
+      describe('last item', () => {
+        it('should return ListNode{data: "Third, next: undefined}', () => {
+          let removeResult = list.remove(list.size() - 1);
+          assertEquals(removeResult, dummyThird);
+        });
+      });
+    });
 
+  });
+
+  describe('get()', () => {
+    describe('on empty list', () => {
+      it('should throw UnderflowError', () => {
+        assertThrows(() => list.find('First'), UnderflowError);
+      });
+    });
+
+    describe('on non-empty list', () => {
+      let dummyFirst, dummySecond, dummyThird;
+      beforeEach(() => {
+        list.push('First');
+        list.push('Second');
+        list.push('Third');
+        dummyFirst = new ListNode('First');
+        dummySecond = new ListNode('Second');
+        dummyThird = new ListNode('Third');
+        dummyFirst.next = dummySecond;
+        dummySecond.next = dummyThird;
+      });
+
+      describe('index smaller than list', () => {
+        it('should throw IndexError', () => {
+          assertThrows(() => list.get(-1), IndexError);
+        });
+      });
+
+      describe('index larger than list', () => {
+        it('should throw IndexError', () => {
+          assertThrows(() => list.get(list.size()), IndexError);
+        });
+      });
+
+      describe('with non-number argument', () => {
+        it('should throw IllegalArgumentError', () => {
+          assertThrows(() => list.get('First'), IllegalArgumentError);
+        });
+      });
+
+      describe('first item', () => {
+        it('should return ListNode{data: "First", next: ListNode{...}}', () => {
+          let getResult = list.get(0);
+          assertEquals(getResult, dummyFirst);
+        });
+      });
+
+      describe('second item', () => {
+        it('should return ListNode{data: "Second", next: ListNode{...}}', () => {
+          let getResult = list.get(1);
+          assertEquals(getResult, dummySecond);
+        });
+      });
+
+      describe('last item', () => {
+        it('should return ListNode{data: "Third", next: undefined}', () => {
+          let getResult = list.get(list.size() - 1);
+          assertEquals(getResult, dummyThird);
+        });
+      });
+    });
+  });
+
+  describe('find()', () => {
+    describe('on empty list', () => {
+      it('should throw UnderflowError', () => {
+        assertThrows(() => list.get(1), UnderflowError);
+      });
+    });
+
+    describe('on non-empty list', () => {
+      let dummyFirst, dummySecond, dummyThird;
+      beforeEach(() => {
+        list.push('First');
+        list.push('Second');
+        list.push('Third');
+        dummyFirst = new ListNode('First');
+        dummySecond = new ListNode('Second');
+        dummyThird = new ListNode('Third');
+        dummyFirst.next = dummySecond;
+        dummySecond.next = dummyThird;
+      });
+
+      describe('"First"', () => {
+        it('should return first item', () => {
+          let findResult = list.find('First');
+          assertEquals(findResult, dummyFirst);
+        });
+      });
+
+      describe('item not in list', () => {
+        it('should return undefined', () => {
+          let findResult = list.find('Whatever');
+          assertEquals(findResult, undefined);
+        });
+      });
+    });
+  });
+
+  describe('update()', () => {
+    describe('on empty list', () => {
+      it('should throw UnderflowError', () => {
+        assertThrows(() => list.update(1, 'Blahblah'), UnderflowError);
+      });
+    });
+
+    describe('on non-empty list', () => {
+      let dummyFirst, dummySecond, dummyThird;
+      beforeEach(() => {
+        list.push('First');
+        list.push('Second');
+        list.push('Third');
+        dummyFirst = new ListNode('First');
+        dummySecond = new ListNode('Second');
+        dummyThird = new ListNode('Third');
+        dummyFirst.next = dummySecond;
+        dummySecond.next = dummyThird;
+      });
+
+      describe('index smaller than list', () => {
+        it('should throw IndexError', () => {
+          assertThrows(() => list.update(-1, 'Whatever'), IndexError);
+        });
+      });
+
+      describe('index larger than list', () => {
+        it('should throw IndexError', () => {
+          assertThrows(() => list.update(list.size(), 'Whatever'), IndexError);
+        });
+      });
+
+      describe('without value argument', () => {
+        it('should throw IllegalArgumentError', () => {
+          assertThrows(() => list.update(1), IllegalArgumentError);
+        });
+      });
+
+      describe('first item', () => {
+        it('should return ListNode{data: "Updated first", next: ListNode{...}}', () => {
+          let updateResult;
+          dummyFirst.data = 'Updated first';
+          updateResult = list.update(0, 'Updated first');
+          assertEquals(updateResult, dummyFirst);
+        });
+      });
+
+      describe('middle item', () => {
+        it('should return ListNode{data: "Updated second", next: ListNode{...}', () => {
+          let updateResult;
+          dummySecond.data = 'Updated second';
+          updateResult = list.update(1, 'Updated second');
+          assertEquals(updateResult, dummySecond);
+        });
+      });
+
+      describe('last item', () => {
+        it('should return ListNode{data: "Updated third", next: undefined', () => {
+          let updateResult;
+          dummyThird.data = 'Updated third';
+          updateResult = list.update(list.size() - 1, 'Updated third');
+          assertEquals(updateResult, dummyThird);
+        });
+      });
+    });
   });
 
 });

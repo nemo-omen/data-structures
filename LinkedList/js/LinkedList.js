@@ -52,6 +52,9 @@ export class LinkedList {
 
     if(index === null || index === undefined) 
       throw new IllegalArgumentError('No index provided');
+    
+    if(typeof index !== 'number')
+      throw new IllegalArgumentError('Index must be a number');
 
     let current = this.head;
     for(let i = 0; i <= index; i++) {
@@ -61,6 +64,24 @@ export class LinkedList {
       current = current.next;
     }
   }
+
+  find(val) {
+    if(this.size() === 0) 
+      throw new UnderflowError('List is empty.');
+
+    if(val === null || val === undefined) 
+      throw new IllegalArgumentError('No value provided.');
+
+    let current = this.head;
+    for(let i = 0; i < this.size(); i++) {
+      if(val === current.data) {
+        return current;
+      }
+      current = current.next;
+    }
+  }
+
+
 
   push(val) {
     if(!val) throw new IllegalArgumentError('No value parameter provided.');
@@ -176,8 +197,42 @@ export class LinkedList {
     if(index === null || index === undefined) 
       throw new IllegalArgumentError('No index provided');
 
-    let indexCount = 0;
+    if(typeof index !== 'number')
+      throw new IllegalArgumentError('Index must be a number');
+
+    if(index === 0) return this.shift();
+
     let current = this.head;
-    
+
+    for(let i = 0; i <= index; i++) {
+      if(i + 1 === index) {
+        let target = current.next;
+        let next = target.next;
+        current.next = next;
+        return target;
+      }
+      current = current.next;
+    }
+  }
+
+  update(index, value) {
+    if(this.size() === 0)
+      throw new UnderflowError('List is empty.');
+
+    if(index < 0 || index >= this.size())
+      throw new IndexError('Index out of range.');
+
+    if(arguments.length < 2 || arguments.length > 2)
+      throw new IllegalArgumentError(`Expected 2 arguments, got ${arguments.length}.`);
+
+    let current = this.head;
+
+    for(let i = 0; i < this.size(); i++) {
+      if(i === index) {
+        current.data = value
+        return current;
+      };
+      current = current.next;
+    }
   }
 }
