@@ -53,22 +53,17 @@ export class LinkedList {
     if(!list || arguments.length < 1) 
       throw new IllegalArgumentError('No list argument provided.');
 
-    let copy = new LinkedList();
+    let res = new LinkedList();
     
     if(list.empty()) 
-      return copy;
+      return res;
 
-    let current = list.head;
-
-    for(let i = 0; i < list.size(); i++) {
-      copy.push(current);
-      current = current.next;
+    for(let node of list) {
+      res.push(node.data);
     }
 
-    return copy;
+    return res;
   }
-
-
 
   empty() {
     return this.#length === 0;

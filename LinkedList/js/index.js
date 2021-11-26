@@ -25,9 +25,9 @@ list.push('Third');
 
 // console.log('original: ', list);
 
-// const cpList = LinkedList.copy(list);
+const cpList = LinkedList.copy(list);
 
-// console.log('copy: ', cpList);
+console.log('copy: ', cpList);
 
 const mapTest = list.map((item) => item + " dookie");
 
