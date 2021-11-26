@@ -1,5 +1,6 @@
+import chai from 'https://cdn.skypack.dev/chai';
+
 import {
-  assert,
   assertExists, 
   assertEquals,
   assertStrictEquals,
@@ -16,6 +17,8 @@ import {
 
 import { LinkedList, ListNode, UnderflowError, IndexError, IllegalArgumentError } from './LinkedList.js';
 
+const assert = chai.assert;
+
 describe("LinkedList", () => {
   let list;
 
@@ -24,8 +27,9 @@ describe("LinkedList", () => {
   });
 
   describe('list', () => {
-    it('should equal LinkedList{head: undefined, tail: undefined}', () => {
-      assertEquals(list, new LinkedList());
+    it('should be LinkedList{head: undefined, tail: undefined}', () => {
+      // use chai assertion here
+      assert.deepEqual(list, new LinkedList());
     })
   });
 
@@ -498,11 +502,131 @@ describe("LinkedList", () => {
     });
   });
 
-  describe('copy()', () => {
+  describe('LinkedList.copy()', () => {
+    describe('with no parameter', () => {
+      it('should throw IllegalArgumentError', () => {
+        assertThrows(() => LinkedList.copy(), IllegalArgumentError);
+      });
+    });
 
     describe('on empty list', () => {
-      it('should return an empty list', () => {
-        assertEquals(list.copy(), new LinkedList());
+      it('should return LinkedList{head: undefined, tail: undefined}', () => {
+        assert.deepEqual(LinkedList.copy(list), new LinkedList());
+      });
+    });
+
+    describe('on non-empty list', () => {
+      let dummyList;
+      beforeEach(() => {
+        dummyList = new LinkedList();
+        list.push('First');
+        dummyList.push('First');
+        list.push('Second');
+        dummyList.push('Second');
+        list.push('Third');
+        dummyList.push('Third');
+      });
+
+      it('should return a copy of the list', () => {
+        assert.deepEqual(LinkedList.copy(list), dummyList);
+      });
+
+    });
+  });
+
+  describe('map()', () => {
+    describe('with no arguments', () => {
+      it('should throw IllegalArgumentError', () => {
+        assertThrows(() => list.map(), IllegalArgumentError);
+      });
+    });
+
+    describe('with two arguments', () => {
+      it('should throw IllegalArgumentError', () => {
+        assertThrows(() => list.map((item) => item = 'Bar', 'Not Good!'), IllegalArgumentError);
+      });
+    });
+
+    describe('with argument that is not a function', () => {
+      it('should throw IllegalArgumentError', () => {
+        assertThrows(() => list.map('Nope!'), IllegalArgumentError);
+      });
+    });
+
+
+    describe('on empty list', () => {
+      it('should return LinkedList{head: undefined, tail: undefined}', () => {
+        assert.deepEqual(list.map((item) => item = 'Foo'), list);
+      });
+    });
+
+    describe('on non-empty list', () => {
+      let dummyList = new LinkedList();
+      beforeEach(() => {
+        list.push('First');
+        list.push('Second');
+        list.push('Third');
+        dummyList.push('Foo');
+        dummyList.push('Foo');
+        dummyList.push('Foo');
+      });
+      
+      describe('changing ListNode.data', () => {
+        it('should return ListNode{data: "Foo", next: ListNode{...}}', () => {
+          assert.deepEqual(list.map((item) => item = 'Foo'), dummyList);
+        });
+      });
+
+    });
+  });
+
+  describe('filter()', () => {
+    beforeEach(() => {
+      list.push('First');
+      list.push('First');
+      list.push('First');
+      list.push('Second');
+      list.push('Third');
+      list.push(1);
+      list.push(2);
+      list.push(3);
+    });
+
+    describe('with no arguments', () => {
+      it('should throw IllegalArgumentError', () => {
+        assertThrows(() => list.filter(), IllegalArgumentError);
+      });
+    });
+
+    describe('with two arguments', () => {
+      it('should throw IllegalArgumentError', () => {
+        assertThrows(() => list.filter((node) => node.data === 'Second', 'Oops!'), IllegalArgumentError);
+      });
+    })
+
+    describe('with non-function argument', () => {
+      it('should throw IllegalArgumentError', () => {
+        assertThrows(() => list.filter('Oops!'), IllegalArgumentError);
+      });
+    });
+
+    describe('for "First"', () => {
+      it('should return LinkedList{...} of 3 elements', () => {
+        let listFirsts = new LinkedList();
+        listFirsts.push('First');
+        listFirsts.push('First');
+        listFirsts.push('First');
+        assert.deepEqual(list.filter((el) => el.data === 'First'), listFirsts);
+      });
+    });
+
+    describe('for number', () => {
+      it('should return LinkedList{...} of 3 elements', () => {
+        let listNumbers = new LinkedList();
+        listNumbers.push(1);
+        listNumbers.push(2);
+        listNumbers.push(3);
+        assert.deepEqual(list.filter((el) => typeof el.data === 'number'), listNumbers);
       });
     });
   });

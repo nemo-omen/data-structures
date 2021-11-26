@@ -10,7 +10,7 @@ list.push(node);
 
 list.push('Third');
 
-console.log(list.update(1, 'Whatever'));
+// console.log(list.update(1, 'Whatever'));
 
 // list.push('Second');
 
@@ -23,4 +23,12 @@ console.log(list.update(1, 'Whatever'));
 
 // list.insert('Fifth', 1);
 
-console.log(list);
+// console.log('original: ', list);
+
+// const cpList = LinkedList.copy(list);
+
+// console.log('copy: ', cpList);
+
+const mapTest = list.map((item) => item + " dookie");
+
+console.log(mapTest);

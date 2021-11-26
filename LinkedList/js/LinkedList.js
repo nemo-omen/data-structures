@@ -40,6 +40,36 @@ export class LinkedList {
     this.#length = 0;
   }
 
+  *[Symbol.iterator]() {
+    let current = this.head;
+
+    while(current!== null && current !== undefined) {
+      yield current;
+      current = current.next;
+    }
+  }
+
+  static copy(list) {
+    if(!list || arguments.length < 1) 
+      throw new IllegalArgumentError('No list argument provided.');
+
+    let copy = new LinkedList();
+    
+    if(list.empty()) 
+      return copy;
+
+    let current = list.head;
+
+    for(let i = 0; i < list.size(); i++) {
+      copy.push(current);
+      current = current.next;
+    }
+
+    return copy;
+  }
+
+
+
   empty() {
     return this.#length === 0;
   }
@@ -254,4 +284,46 @@ export class LinkedList {
       current = current.next;
     }
   }
+
+  map(fn) {
+    if(arguments.length !== 1) 
+      throw new IllegalArgumentError('Expected 1 argument, got ' + arguments.length);
+
+    if(typeof fn !== 'function') 
+      throw new IllegalArgumentError('Expected a function, got ' + typeof fn);
+    
+    if(this.#length === 0)
+      return this;
+
+
+    const res = new LinkedList();
+
+    // oh, baby... iterators are an __excellent__ addition!
+    for(let node of this) {
+      res.push(fn(node.data));
+    }
+
+    return res;
+  }
+
+  filter(fn) {
+    if(this.#length === 0) 
+      return;
+
+    if(arguments.length !== 1)
+      throw new IllegalArgumentError('Expected 1 argument got ' + arguments.length);
+
+    if(typeof fn !== 'function')
+      throw new IllegalArgumentError('Expected a function, got ' + typeof fn);
+
+    let res = new LinkedList();
+
+    for(let node of this) {
+      if(fn(node)) {
+        res.push(node);
+      }
+    }
+    return res;
+  }
+
 }
