@@ -29,6 +29,23 @@ describe("LinkedList", () => {
     })
   });
 
+  describe('empty()', () => {
+    describe('on empty list', () => {
+      it('should return true', () => {
+        assertEquals(list.empty(), true);
+      });
+    });
+
+    describe('on non empty list', () => {
+      it('should return false', () => {
+        list.push('First');
+        list.push('Second');
+        list.push('Third');
+        assertEquals(list.empty(), false);
+      });
+    });
+  });
+
   describe("size()", () => {
     it('should be 0', () => {
       assertEquals(list.size(), 0);
@@ -179,12 +196,12 @@ describe("LinkedList", () => {
         dummyInsert.next = dummySecond;
       });
       
-      it('should return LinkNode{data: "Third", next: ListNode{data: "Second", next: undefined}}', () => {
+      it('should return LinkNode{data: "Third", next: ListNode{...}', () => {
         insertResult = list.insert('Third', 1);
         assertEquals(insertResult, dummyInsert);
       });
 
-      it('should have a head with next: ListNode{data: "Third", next: ListNode{data: "Second", next: undefined}}', () => {
+      it('should have a head with next: ListNode{data: "Third", next: ListNode{...}}', () => {
         insertResult = list.insert('Third', 1);
         assertEquals(list.head.next, dummyInsert);
       });
@@ -242,7 +259,7 @@ describe("LinkedList", () => {
         dummySecond.next = dummyThird;
       });
 
-      it('should return ListNode{data: "First", next: {data: "Second", next: {data: "Third", next: undefined}}', () => {
+      it('should return ListNode{data: "First", next: ListNode{...}}', () => {
         assertEquals(list.shift(), dummyFirst);
       });
 
@@ -294,7 +311,7 @@ describe("LinkedList", () => {
       });
 
       describe('second item', () => {
-        it('should return ListNode{data: "Second", next: ListNode{data: "Third", next: undfined}}', () => {
+        it('should return ListNode{data: "Second", next: ListNode{...}}', () => {
           let removeResult = list.remove(1);
           assertEquals(removeResult, dummySecond);
         });

@@ -29,6 +29,7 @@ export class ListNode {
   }
 }
 
+
 export class LinkedList {
   head;
   tail;
@@ -39,10 +40,23 @@ export class LinkedList {
     this.#length = 0;
   }
 
+  empty() {
+    return this.#length === 0;
+  }
+
+  /**
+   * 
+   * @returns Number of elements in list
+   */
   size() {
     return this.#length;
   }
 
+  /**
+   * Get the ListNode at a given index.
+   * @param {number} index of item to returns
+   * @returns ListNode at given indexError
+   */
   get(index) {
     if(this.size() === 0) 
       throw new UnderflowError('List is empty.');
@@ -65,6 +79,11 @@ export class LinkedList {
     }
   }
 
+  /**
+   * Find the first element in list with data property that matches a given value.
+   * @param {any} val value to search list for.
+   * @returns First ListNode with data property that matches given value.
+   */
   find(val) {
     if(this.size() === 0) 
       throw new UnderflowError('List is empty.');
