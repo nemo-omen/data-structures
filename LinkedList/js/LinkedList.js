@@ -101,7 +101,7 @@ export class LinkedList {
   }
 
 
-
+  
   push(val) {
     if(!val) throw new IllegalArgumentError('No value parameter provided.');
 

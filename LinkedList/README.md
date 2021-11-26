@@ -17,6 +17,6 @@ Methods in the following table will be included in each implementation of Linked
 | `shift()` | Removes element from start of list and returns that element | ✔️ |  |  |
 | `remove()` | Removes element at given index and returns that element | ✔️ |  |  |
 | `update()` | Changes the value of an element at a given index. | ✔️ |  |  |
+| `copy()` | Creates a LinkedList from a given list, returns copy |  |  |  |
 | `filter()` | Filters a list against a specific condition, returns LinkedList of nodes who match the condition. |  |  |  |
 | `sort()` | Sorts a LinkedList - in ascending order by default, but should allow for a given sorting function. Returns sorted copy. |  |  |  |
-| `copy()` | Creates a LinkedList from a given list, returns copy |  |  |  |

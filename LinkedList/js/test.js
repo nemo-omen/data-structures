@@ -498,4 +498,13 @@ describe("LinkedList", () => {
     });
   });
 
+  describe('copy()', () => {
+
+    describe('on empty list', () => {
+      it('should return an empty list', () => {
+        assertEquals(list.copy(), new LinkedList());
+      });
+    });
+  });
+
 });
