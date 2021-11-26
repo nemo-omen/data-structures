@@ -261,4 +261,46 @@ describe("LinkedList", () => {
     });
   });
 
+  describe('remove()', () => {
+    describe('on empty list', () => {
+      it('should throw UnderflowError', () => {
+        assertThrows(() => list.remove(1), UnderflowError);
+      });
+    });
+
+    describe('on non-empty list', () => {
+      beforeEach(() => {
+        list.push('First');
+        list.push('Second');
+        list.push('Third');
+        dummyFirst = new ListNode('First');
+        dummySecond = new ListNode('Second');
+        dummyThird = new ListNode('Third');
+        dummyFirst.next = dummySecond;
+        dummySecond.next = dummyThird;
+      });
+
+      describe('remove index smaller than list', () => {
+        it('should throw IndexError', () => {
+          assertThrows(() => list.remove(-1), IndexError);
+        });
+      });
+
+      describe('remove index larger than list', () => {
+        it('should throw IndexError', () => {
+          assertThrows(() => list.remove(list.size()), IndexError);
+        });
+      });
+
+      describe('remove second item', () => {
+        let removeResult = list.remove(1);
+        it('should return ListNode{data: "Second", next: ListNode{data: "Third", next: undfined}}', () => {
+          assertEquals(removeResult, dummySecond);
+        });
+      })
+    })
+
+
+  });
+
 });

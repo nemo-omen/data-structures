@@ -47,7 +47,7 @@ export class LinkedList {
     if(this.size() === 0) 
       throw new UnderflowError('List is empty.');
 
-    if(index < 0 || index > this.#length) 
+    if(index < 0 || index > this.#length - 1) 
       throw new IndexError('Index out of range.');
 
     if(index === null || index === undefined) 
@@ -164,5 +164,20 @@ export class LinkedList {
     }
 
     return oldHead;
+  }
+
+  remove(index) {
+    if(this.size() === 0) 
+      throw new UnderflowError('List is empty.');
+
+    if(index < 0 || index > this.#length - 1) 
+      throw new IndexError('Index out of range.');
+
+    if(index === null || index === undefined) 
+      throw new IllegalArgumentError('No index provided');
+
+    let indexCount = 0;
+    let current = this.head;
+    
   }
 }
