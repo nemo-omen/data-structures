@@ -219,7 +219,7 @@ export class LinkedList {
     if(this.size() === 0)
       throw new UnderflowError('List is empty.');
 
-    if(index < 0 || index >= this.size())
+    if(index < 0 || index >= this.#length)
       throw new IndexError('Index out of range.');
 
     if(arguments.length < 2 || arguments.length > 2)
@@ -227,7 +227,7 @@ export class LinkedList {
 
     let current = this.head;
 
-    for(let i = 0; i < this.size(); i++) {
+    for(let i = 0; i < this.#length; i++) {
       if(i === index) {
         current.data = value
         return current;
