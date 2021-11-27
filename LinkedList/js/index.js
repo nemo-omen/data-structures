@@ -27,19 +27,8 @@ list.push('Third');
 
 const cpList = LinkedList.copy(list);
 
-console.log('copy: ', cpList);
+// console.log('copy: ', cpList);
 
 const mapTest = list.map((item) => item + " dookie");
 
-const illegalFilterTest = list.filter();
-
-console.log(mapTest);
-
-const reduceTest = list.reduce((acc, i) => {
-  acc += i.data;
-  return acc;
-}, '');
-
-console.log(reduceTest);
-
-const illegalReduce = list.reduce();
+console.log(Reflect.ownKeys(list));
