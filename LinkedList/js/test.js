@@ -631,4 +631,42 @@ describe("LinkedList", () => {
     });
   });
 
+  describe('reduce()', () => {
+    describe('with no arguments', () => {
+      it('should throw IllegalArgumentError', () => {
+        assertThrows(() => list.reduce(), IllegalArgumentError);
+      });
+    });
+
+    describe('with non-function argument', () => {
+      it('should throw IllegalArgumentError', () => {
+        assertThrows(() => list.reduce('Oops!', 'Hey!'), IllegalArgumentError);
+      });
+    });
+
+    describe('with numbers', () => {
+      beforeEach(() => {
+        list.push(1);
+        list.push(2);
+        list.push(3);
+      });
+
+      it('should return 6 when added', () => {
+        assertEquals(list.reduce((acc, i) => {
+          acc += i.data;
+          return acc;
+        }, 0), 6);
+      });
+
+      it('should return 6 when multiplied', () => {
+        assertEquals(list.reduce((acc, i) => {
+          acc *= i.data;
+          return acc;
+        }, 1), 6);
+      });
+      
+    });
+
+  });
+
 });

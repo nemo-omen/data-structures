@@ -305,11 +305,15 @@ export class LinkedList {
     if(this.#length === 0) 
       return;
 
-    if(arguments.length !== 1)
-      throw new IllegalArgumentError('Expected 1 argument got ' + arguments.length);
+    if(arguments.length !== 1) {
+      let msg = 'Expected 1 argument got ' + arguments.length;
+      throw new IllegalArgumentError(msg);
+    }
 
-    if(typeof fn !== 'function')
-      throw new IllegalArgumentError('Expected a function, got ' + typeof fn);
+    if(typeof fn !== 'function') {
+      let msg = 'Expected a function, got ' + typeof fn;
+      throw new IllegalArgumentError(msg);
+    }
 
     let res = new LinkedList();
 
@@ -319,6 +323,22 @@ export class LinkedList {
       }
     }
     return res;
+  }
+
+  reduce(fn, acc) {
+    if(arguments.length !== 2)
+      throw new IllegalArgumentError(`Expected 2 arguments got ${arguments.length}`);
+    
+    if(typeof fn !== 'function')
+      throw new IllegalArgumentError(`Expected a function, got ${typeof fn}`);
+
+    if(this.#length === 0) 
+      return;
+
+    for(let node of this) {
+      acc = fn(acc, node);
+    }
+    return acc;
   }
 
 }
