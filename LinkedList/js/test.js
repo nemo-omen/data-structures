@@ -679,9 +679,86 @@ describe("LinkedList", () => {
           return acc += i.data;
         }, ''), 'Hello, World!');
       });
-      
+
     });
 
+  });
+
+  describe('sort()', () => {
+    describe('list <= 1', () => {
+      it('should return empty list', () => {
+        assert.deepEqual(list, LinkedList.sort(list));
+      });
+
+      it('should return list size() == 1', () => {
+        list.push('First');
+        assert.deepEqual(list, LinkedList.sort(list));
+      });
+    });
+
+    describe('with no arguments', () => {
+      it('should throw IllegalArgumentError', () => {
+        assertThrows(() => LinkedList.sort(), IllegalArgumentError);
+      });
+    });
+
+    describe('with more than one arguments', () => {
+      it('should throw IllegalArgumentError', () => {
+        assertThrows(() => LinkedList.sort(list, 'Nope!'), IllegalArgumentError);
+      });
+    });
+
+    describe('with non-object argument', () => {
+      it('should throw IllegalArgumentError', () => {
+        assertThrows(() => LinkedList.sort(1), IllegalArgumentError);
+      });
+    });
+
+    describe('with list of strings', () => {
+      let dummyList = new LinkedList();
+      beforeEach(() => {
+        dummyList.push('a');
+        dummyList.push('b');
+        dummyList.push('c');
+        dummyList.push('d');
+        dummyList.push('e');
+        list.push('c');
+        list.push('a');
+        list.push('d');
+        list.push('b');
+        list.push('e');
+      });
+
+      it('should return sorted list', () => {
+        assert.deepEqual(LinkedList.sort(list), dummyList);
+      });
+    });
+
+    describe('list with numbers', () => {
+      let dummyList = new LinkedList();
+      beforeEach(() => {
+        dummyList.push(0);
+        dummyList.push(1);
+        dummyList.push(2);
+        dummyList.push(3);
+        dummyList.push(3.3);
+        dummyList.push(4);
+        dummyList.push(5);
+        dummyList.push(6);
+        list.push(3.3);
+        list.push(2);
+        list.push(6);
+        list.push(3);
+        list.push(0);
+        list.push(4);
+        list.push(1);
+        list.push(5);
+      });
+
+      it('should return a sorted list', () => {
+        assert.deepEqual(LinkedList.sort(list), dummyList);
+      });
+    });
   });
 
 });

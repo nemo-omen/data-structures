@@ -23,7 +23,7 @@ export class ListNode {
   data;
   next;
   constructor(val) {
-    if(!val) throw new IllegalArgumentError('No value parameter provided.');
+    if(arguments.length < 1) throw new IllegalArgumentError('No value parameter provided.');
     this.data = val;
     this.next = undefined;
   }
@@ -65,6 +65,38 @@ export class LinkedList {
     return res;
   }
 
+  static sort(list) {
+    if(arguments.length !== 1)
+      throw new IllegalArgumentError(`Expected one argument, got ${arguments.length}`);
+
+    if(typeof list !== 'object')
+      throw new IllegalArgumentError(`Expected LinkedList, got ${typeof list}`);
+
+    if(list.size() <= 1) return list;
+
+    let mid = Math.floor(list.size() / 2);
+    let left = new LinkedList();
+    let right = new LinkedList();
+
+    let index = 1;
+    let node = list.head;
+
+    while(node) {
+      if(index <= mid) {
+        left.push(node.data);
+      } else {
+        right.push(node.data);
+      }
+      index++;
+      node = node.next;
+    }
+
+    left = this.sort(left);
+    right = this.sort(right);
+
+    return merge(left, right);
+  }
+
   empty() {
     return this.#length === 0;
   }
@@ -75,6 +107,19 @@ export class LinkedList {
    */
   size() {
     return this.#length;
+  }
+
+  toString() {
+    let out = "[ ";
+    for(let node of this) {
+      if(node.next) {
+        out += node.data + " > ";
+      } else {
+        out += node.data;
+      }
+    }
+    out += " ]";
+    return out;
   }
 
   /**
@@ -124,16 +169,18 @@ export class LinkedList {
       current = current.next;
     }
   }
-
-
   
   push(val) {
-    if(!val) throw new IllegalArgumentError('No value parameter provided.');
+    if(arguments.length < 1) throw new IllegalArgumentError('No value parameter provided.');
+    if(val === null || val === undefined) throw new IllegalArgumentError('Val is null or undefined');
 
-    // allow for parameters of type: ListNode
-    // or the value of a ListNode to be instantiated on the spot
-    if(typeof val === 'object' && (val !== null || val !== undefined)) return this.push(val.data);
-    const node = new ListNode(val);
+    // allow for parameters of type: ListNode or value to instantiate ListNode with
+    let node;
+    if(typeof val === 'object' && (val !== null || val !== undefined)){
+      node = val;
+    } else {
+      node = new ListNode(val);
+    };
 
     if(!this.head) {
       this.head = node;
@@ -147,15 +194,21 @@ export class LinkedList {
   }
 
   unshift(val) {
-    if(!val) throw new IllegalArgumentError('No value parameter provided.');
-    if(typeof val === 'object' && (val !== null || val !== undefined)) return this.unshift(val.data);
+    if(arguments.length < 1) throw new IllegalArgumentError('No value parameter provided.');
+    if(val === null || val === undefined) throw new IllegalArgumentError('Val is null or undefined');
+    
+    let node;
+    if(typeof val === 'object' && (val !== null || val !== undefined)){
+      node = val;
+    } else {
+      node = new ListNode(val);
+    };
 
     if(this.size === 0) {
       this.push(val)
     } else {
-      let newNode = new ListNode(val);
       let temp = this.head;
-      this.head = newNode;
+      this.head = node;
       this.head.next = temp;
       this.#length++;
     };
@@ -319,7 +372,7 @@ export class LinkedList {
 
     for(let node of this) {
       if(fn(node)) {
-        res.push(node);
+        res.push(node.data);
       }
     }
     return res;
@@ -341,4 +394,25 @@ export class LinkedList {
     return acc;
   }
 
+}
+
+function merge(left, right) {
+  let result = new LinkedList();
+
+  while((left.size() > 0) && (right.size() > 0)) {
+    if(left.head.data <= right.head.data) {
+      result.push(left.shift().data);
+    } else {
+      result.push(right.shift().data);
+    }
+  }
+
+  while(left.size() > 0) {
+    result.push(left.shift().data);
+  }
+
+  while(right.size() > 0) {
+    result.push(right.shift().data);
+  }
+  return result;
 }
