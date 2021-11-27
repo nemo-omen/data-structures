@@ -645,10 +645,15 @@ describe("LinkedList", () => {
     });
 
     describe('with numbers', () => {
+      let letterList;
       beforeEach(() => {
+        letterList = new LinkedList();
         list.push(1);
         list.push(2);
         list.push(3);
+
+        letterList.push('Hello, ');
+        letterList.push('World!');
       });
 
       it('should return 6 when added', () => {
@@ -663,6 +668,12 @@ describe("LinkedList", () => {
           acc *= i.data;
           return acc;
         }, 1), 6);
+      });
+
+      it('should return "Hello, World!"', () => {
+        assertEquals(letterList.reduce((acc, i) => {
+          return acc += i.data;
+        }, ''), 'Hello, World!');
       });
       
     });
