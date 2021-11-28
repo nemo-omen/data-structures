@@ -61,4 +61,9 @@ console.log("" + sortedN);
 
 console.log("" + LinkedList.sort(list));
 
-console.log("" + LinkedList.sort(snList));
+console.log("" + snList);
+
+snList[snList.length - 1].data = 22;
+
+console.log(snList[snList.size() - 1]);
+console.log(snList[- 1]);

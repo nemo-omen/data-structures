@@ -33,11 +33,23 @@ export class ListNode {
 export class LinkedList {
   head;
   tail;
-  #length;
+  length;
   constructor() {
     this.head = undefined;
     this.tail = undefined;
-    this.#length = 0;
+    this.length = 0;
+    return new Proxy(this, {
+      get(that, prop) {
+          return typeof prop === "string" && /^(0|-?[1-9]\d*)$/.test(prop) 
+              ? that.get(+prop) 
+              : Reflect.get(...arguments);
+      },
+      set(that, prop, value) {
+          return typeof prop === "string" && /^(0|-?[1-9]\d*)$/.test(prop)
+              ? (that.get(+prop).value = value) 
+              : Reflect.set(...arguments);
+      }
+  });
   }
 
   *[Symbol.iterator]() {
@@ -98,7 +110,7 @@ export class LinkedList {
   }
 
   empty() {
-    return this.#length === 0;
+    return this.length === 0;
   }
 
   /**
@@ -106,7 +118,7 @@ export class LinkedList {
    * @returns Number of elements in list
    */
   size() {
-    return this.#length;
+    return this.length;
   }
 
   toString() {
@@ -131,22 +143,17 @@ export class LinkedList {
     if(this.size() === 0) 
       throw new UnderflowError('List is empty.');
 
-    if(index < 0 || index > this.#length - 1) 
-      throw new IndexError('Index out of range.');
-
     if(index === null || index === undefined) 
       throw new IllegalArgumentError('No index provided');
     
     if(typeof index !== 'number')
       throw new IllegalArgumentError('Index must be a number');
 
-    let current = this.head;
-    for(let i = 0; i <= index; i++) {
-      if(i === index) {
-        return current;
-      }
-      current = current.next;
-    }
+      if (index < 0 && (index += this.length) < 0) throw new Error("Invalid index"); 
+      let node = this.head;
+      while (index-- > 0 && node) node = node.next;
+      if (!node) throw new Error("Invalid index");
+      return node;
   }
 
   /**
@@ -189,7 +196,7 @@ export class LinkedList {
       this.tail.next = node;
       this.tail = node;
     }
-    this.#length++;
+    this.length++;
     return this.tail;
   }
 
@@ -210,20 +217,20 @@ export class LinkedList {
       let temp = this.head;
       this.head = node;
       this.head.next = temp;
-      this.#length++;
+      this.length++;
     };
     return this.head;
   }
 
   insert(val, index) {
-    if(index < 0 || index > this.#length) 
+    if(index < 0 || index > this.length) 
       throw new IndexError(
           `Index out of bounds. Index ${index} is ${index < 0 ? 'smaller' : 'larger'}  than the list's size.`
       );
 
     if(typeof val === 'object' && (val !== null || val !== undefined)) return this.insert(val.data, index);
 
-    if(index === this.#length) return this.push(val);
+    if(index === this.length) return this.push(val);
 
     let newNode = new ListNode(val);
     if(index === 0) {
@@ -236,7 +243,7 @@ export class LinkedList {
       previous.next = newNode;
       newNode.next = temp;
     }
-    this.#length++;
+    this.length++;
     return newNode;
   }
 
@@ -255,9 +262,9 @@ export class LinkedList {
     oldTail = newTail.next;
     this.tail = newTail;
     this.tail.next = undefined;
-    this.#length--;
+    this.length--;
 
-    if(this.#length === 0) {
+    if(this.length === 0) {
       this.head = undefined;
       this.tail = undefined;
     }
@@ -274,9 +281,9 @@ export class LinkedList {
 
     let oldHead = this.head;
     this.head = oldHead.next;
-    this.#length--;
+    this.length--;
 
-    if(this.#length === 0) {
+    if(this.length === 0) {
       this.head = undefined;
       this.tail = undefined;
     }
@@ -288,7 +295,7 @@ export class LinkedList {
     if(this.size() === 0) 
       throw new UnderflowError('List is empty.');
 
-    if(index < 0 || index > this.#length - 1) 
+    if(index < 0 || index > this.length - 1) 
       throw new IndexError('Index out of range.');
 
     if(index === null || index === undefined) 
@@ -316,7 +323,7 @@ export class LinkedList {
     if(this.size() === 0)
       throw new UnderflowError('List is empty.');
 
-    if(index < 0 || index >= this.#length)
+    if(index < 0 || index >= this.length)
       throw new IndexError('Index out of range.');
 
     if(arguments.length < 2 || arguments.length > 2)
@@ -324,7 +331,7 @@ export class LinkedList {
 
     let current = this.head;
 
-    for(let i = 0; i < this.#length; i++) {
+    for(let i = 0; i < this.length; i++) {
       if(i === index) {
         current.data = value
         return current;
@@ -340,7 +347,7 @@ export class LinkedList {
     if(typeof fn !== 'function') 
       throw new IllegalArgumentError('Expected a function, got ' + typeof fn);
     
-    if(this.#length === 0)
+    if(this.length === 0)
       return this;
 
 
@@ -355,7 +362,7 @@ export class LinkedList {
   }
 
   filter(fn) {
-    if(this.#length === 0) 
+    if(this.length === 0) 
       return;
 
     if(arguments.length !== 1) {
@@ -385,7 +392,7 @@ export class LinkedList {
     if(typeof fn !== 'function')
       throw new IllegalArgumentError(`Expected a function, got ${typeof fn}`);
 
-    if(this.#length === 0) 
+    if(this.length === 0) 
       return;
 
     for(let node of this) {
