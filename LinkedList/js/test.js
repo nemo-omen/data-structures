@@ -358,18 +358,6 @@ describe("LinkedList", () => {
         dummySecond.next = dummyThird;
       });
 
-      describe('index smaller than list', () => {
-        it('should throw IndexError', () => {
-          assertThrows(() => list.get(-1), IndexError);
-        });
-      });
-
-      describe('index larger than list', () => {
-        it('should throw IndexError', () => {
-          assertThrows(() => list.get(list.size()), IndexError);
-        });
-      });
-
       describe('with non-number argument', () => {
         it('should throw IllegalArgumentError', () => {
           assertThrows(() => list.get('First'), IllegalArgumentError);

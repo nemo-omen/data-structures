@@ -22,10 +22,12 @@ export class IllegalArgumentError extends Error {
 export class ListNode {
   data;
   next;
+  previous;
   constructor(val) {
     if(arguments.length < 1) throw new IllegalArgumentError('No value parameter provided.');
     this.data = val;
     this.next = undefined;
+    this.previous = undefined;
   }
 }
 
@@ -124,8 +126,8 @@ export class LinkedList {
   toString() {
     let out = "[ ";
     for(let node of this) {
-      if(node.next) {
-        out += node.data + " > ";
+      if(node.previous) {
+        out += " <•> " + node.data;
       } else {
         out += node.data;
       }
@@ -190,11 +192,14 @@ export class LinkedList {
     };
 
     if(!this.head) {
-      this.head = node;
-      this.tail = this.head;
+      this.head = this.tail = node;
+      this.head.previous = undefined;
+      this.tail.next = undefined;
     } else {
       this.tail.next = node;
+      node.previous = this.tail;
       this.tail = node;
+      this.tail.next = undefined;
     }
     this.length++;
     return this.tail;
@@ -211,14 +216,17 @@ export class LinkedList {
       node = new ListNode(val);
     };
 
-    if(this.size === 0) {
-      this.push(val)
+    if(this.head === undefined) {
+      this.head = this.tail = node;
+      this.head.prev = undefined;
+      this.tail.next = undefined;
     } else {
-      let temp = this.head;
+      this.head.previous = node;
+      node.next = this.head;
       this.head = node;
-      this.head.next = temp;
-      this.length++;
+      this.head.previous = undefined;
     };
+    this.length++;
     return this.head;
   }
 
@@ -234,14 +242,17 @@ export class LinkedList {
 
     let newNode = new ListNode(val);
     if(index === 0) {
-      let temp = this.head;
-      this.head = newNode;
-      this.head.next = temp;
+      // let temp = this.head;
+      // this.head = newNode;
+      // this.head.next = temp;
+      this.unshift(val);
     } else {
       let previous = this.get(index - 1);
       let temp = previous.next;
       previous.next = newNode;
+      previous.next.previous = previous;
       newNode.next = temp;
+      newNode.next.previous = previous.next;
     }
     this.length++;
     return newNode;
@@ -250,16 +261,9 @@ export class LinkedList {
   pop() {
     if(this.size() === 0) throw new UnderflowError('List already empty.');
 
-    let current = this.head;
-    let newTail = current;
-    let oldTail;
-    
-    while(current.next) {
-      newTail = current;
-      current = current.next;
-    }
-
-    oldTail = newTail.next;
+    let oldTail = this.tail;
+    let newTail = this.tail.previous;
+    this.tail.previous = undefined;
     this.tail = newTail;
     this.tail.next = undefined;
     this.length--;
@@ -281,6 +285,7 @@ export class LinkedList {
 
     let oldHead = this.head;
     this.head = oldHead.next;
+    this.head.previous = undefined;
     this.length--;
 
     if(this.length === 0) {
@@ -313,6 +318,7 @@ export class LinkedList {
         let target = current.next;
         let next = target.next;
         current.next = next;
+        current.next.previous = current;
         return target;
       }
       current = current.next;
